@@ -9,45 +9,44 @@ namespace TiendadeRopa.WebAdmin.Controllers
 {
     public class CategoriasController : Controller
     {
-        CategoriasBL  _categoriasBL;
+        CategoriasBL _categoriasBL;
 
-        public CategoriasController()
-        {
-            _categoriasBL = new CategoriasBL();
-        }
+    public CategoriasController()
+    {
+        _categoriasBL = new CategoriasBL();
+    }
 
-        // GET: Categorias
-        public ActionResult Index()
-        {
-            var listadeCategorias = _categoriasBL.ObtenerCategorias();
+    public ActionResult Index()
+    {
+        var listadeCategorias = _categoriasBL.ObtenerCategorias();
+        return View(listadeCategorias);
+    }
+    public ActionResult Crear()
+    {
+        var nuevaCategoria = new Categoria();
+        return View(nuevaCategoria);
+    }
 
-            return View(listadeCategorias);
-        }
+    [HttpPost]
 
-        public ActionResult Crear()
-        {
-            var nuevaCategoria = new Categoria();
-
-            return View(nuevaCategoria);
-
-        }
-        [HttpPost]
-        public ActionResult Crear(Categoria categoria)
+    public ActionResult Crear(Categoria categoria)
         {
             if (ModelState.IsValid)
             {
                 if (categoria.Descripcion != categoria.Descripcion.Trim())
                 {
-                    ModelState.AddModelError("Descripcion", "La descripcion no debe contener espacios al inicio ni al Final");
+                    ModelState.AddModelError("Descripcion", "La descripción no debe contener espacios al inicio o al final");
                     return View(categoria);
                 }
                 _categoriasBL.GuardarCategoria(categoria);
+
                 return RedirectToAction("Index");
             }
 
             return View(categoria);
-
         }
+
+ 
         public ActionResult Editar(int id)
         {
             var producto = _categoriasBL.ObtenerCategoria(id);
@@ -55,22 +54,24 @@ namespace TiendadeRopa.WebAdmin.Controllers
         }
 
         [HttpPost]
+
         public ActionResult Editar(Categoria categoria)
         {
             if (ModelState.IsValid)
             {
                 if (categoria.Descripcion != categoria.Descripcion.Trim())
                 {
-                    ModelState.AddModelError("Descripcion", "La descripcion no debe contener espacios al inicio ni al Final");
+                    ModelState.AddModelError("Descripcion", "La descripción no debe contener espacios al inicio o al final");
                     return View(categoria);
                 }
+
                 _categoriasBL.GuardarCategoria(categoria);
                 return RedirectToAction("Index");
             }
 
-            return View(categoria); ;
-
+            return View(categoria);
         }
+
         public ActionResult Detalle(int id)
         {
             var producto = _categoriasBL.ObtenerCategoria(id);
@@ -86,9 +87,6 @@ namespace TiendadeRopa.WebAdmin.Controllers
         {
             _categoriasBL.EliminarCategoria(producto.Id);
             return RedirectToAction("Index");
-
-
         }
- }
+    }
 }
-
